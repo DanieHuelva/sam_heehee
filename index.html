@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>hey sam</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️</text></svg>">
+<style>
+:root{--bg:#fff0f3;--fg:#5a1a2b;--heart:#ff3b6b}
+@media (prefers-color-scheme:dark){:root{--bg:#1e0f14;--fg:#ffd9e2;--heart:#ff4d7a}}
+html,body{height:100%;margin:0;overflow:hidden}
+body{background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+h1{font-size:clamp(1.4rem,5vw,2.4rem);margin:0 1rem 2rem;position:relative;z-index:3}
+#heart{width:120px;height:120px;border:0;background:none;padding:0;cursor:pointer;transition:transform .35s cubic-bezier(.3,1.6,.5,1);z-index:2;-webkit-tap-highlight-color:transparent}
+#heart svg{width:100%;height:100%;fill:var(--heart);display:block}
+#reveal{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--heart);opacity:0;pointer-events:none;transition:opacity .6s;z-index:5;color:#fff}
+#reveal.show{opacity:1;pointer-events:auto}
+#pic{max-width:90%;max-height:70%;border-radius:16px;box-shadow:0 8px 40px rgba(0,0,0,.35)}
+.ph{font-size:6rem}
+#reveal p{font-size:clamp(1.2rem,4vw,2rem);font-weight:700;margin:1rem}
+button.again{border:0;border-radius:99px;padding:.6rem 1.4rem;font-size:1rem;cursor:pointer;background:#fff;color:#c2185b}
+</style>
+</head>
+<body>
+<h1 id="msg">hey sam keep pressing this button</h1>
+<button id="heart" aria-label="heart">
+<svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.3 8.4 2 4.5 5.6 4.5c2.1 0 3.6 1.1 4.4 2.5.8-1.4 2.3-2.5 4.4-2.5 3.6 0 5.3 3.900 3.600 7.200C19.500 16.400 12 21 12 21z"/></svg>
+</button>
+ 
+<div id="reveal">
+  <!-- Put the funny photo in the same folder and name it sam.jpg -->
+  <img id="pic" src="sam.jpg" alt="sam" onerror="this.hidden=true;document.getElementById('ph').hidden=false">
+  <div id="ph" class="ph" hidden>🤪</div>
+  <p>oh should I wear this dark khaki or light khaki today</p>
+  <button class="again" id="again">again?</button>
+</div>
+ 
+
+<audio id="snd" src="sound.m4a" preload="auto"></audio>
+<script>
+const CLICKS = 12;
+let n = 0;
+const heart = document.getElementById('heart');
+const reveal = document.getElementById('reveal');
+const msg = document.getElementById('msg');
+const lines = ["keep going... ugh im there","bigger like ur dih!","don't stop now please keep going","you're doing great babyuughhhh","more!","it's growing... my dih ofc","almost there?","keep pressing!!","oh no","it's HUGE","one more..."];
+ 
+function target(){ return Math.max(innerWidth, innerHeight) * 2.2 / 120; }
+ 
+heart.addEventListener('click', () => {
+  n++;
+  const snd = document.getElementById('snd');
+snd.currentTime = 0;
+snd.play();
+  heart.style.transform = 'scale(' + Math.pow(target(), n / CLICKS) + ')';
+  if (n < CLICKS) msg.textContent = lines[(n - 1) % lines.length];
+  else setTimeout(() => reveal.classList.add('show'), 350);
+});
+ 
+document.getElementById('again').addEventListener('click', () => {
+  n = 0;
+  reveal.classList.remove('show');
+  heart.style.transform = 'scale(1)';
+  msg.textContent = "hey sam keep pressing this button";
+});
+</script>
+</body>
+</html>
